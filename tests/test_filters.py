@@ -882,8 +882,6 @@ class TestFilter:
         with pytest.raises(TemplateRuntimeError, match="No filter named 'f'"):
             t2.render(x=42)
 
-
-
 def test_indent_first_respects_blank(env):
     """Empty input must not become spaces when first=True and blank=False.
 
@@ -892,17 +890,13 @@ def test_indent_first_respects_blank(env):
     tmpl = env.from_string("{% filter indent(4, first=True) %}{% endfilter %}")
     assert tmpl.render() == ""
 
-    # Explicit blank=True still indents an empty result.
     tmpl = env.from_string(
         "{% filter indent(4, first=True, blank=True) %}{% endfilter %}"
     )
     assert tmpl.render() == "    "
 
     # Leading empty line with following content still gets first-line indent.
-    text = "
-".join(["", "foo bar", '"baz"', ""])
+    text = "\n".join(["", "foo bar", '"baz"', ""])
     tmpl = env.from_string("{{ foo|indent(2, true, false) }}")
-    assert tmpl.render(foo=text) == '  
-  foo bar
-  "baz"
-'
+    assert tmpl.render(foo=text) == '  \n  foo bar\n  "baz"\n'
+
