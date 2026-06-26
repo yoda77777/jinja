@@ -161,6 +161,8 @@ class SecurityError(TemplateRuntimeError):
 
 
 class FilterArgumentError(TemplateRuntimeError):
-    """This error is raised if a filter was called with inappropriate
-    arguments
+    """Raised when a filter is called with invalid arguments.
+
+    Custom filters may raise this exception for the same cases. It is a
+    subclass of :exc:`TemplateRuntimeError`.
     """
