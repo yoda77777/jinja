@@ -881,3 +881,15 @@ class TestFilter:
 
         with pytest.raises(TemplateRuntimeError, match="No filter named 'f'"):
             t2.render(x=42)
+
+
+def test_indent_uses_newline_sequence():
+    """indent should follow Environment.newline_sequence.
+
+    Regression for https://github.com/pallets/jinja/issues/2016
+    """
+    from jinja2 import Environment
+
+    env = Environment(newline_sequence="\r\n")
+    out = env.from_string("{{ value|indent(2, first=True) }}").render(value="a\nb")
+    assert out == "  a\r\n  b"
