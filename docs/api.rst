@@ -634,6 +634,8 @@ Exceptions
 
 .. autoexception:: jinja2.TemplateRuntimeError
 
+.. autoexception:: jinja2.FilterArgumentError
+
 .. autoexception:: jinja2.TemplateAssertionError
 
 
