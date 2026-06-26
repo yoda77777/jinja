@@ -891,7 +891,8 @@ def test_map_attribute_default_none(env):
     tmpl = env.from_string("{{ [{}]|map(attribute='foo', default=none)|list }}")
     assert tmpl.render() == "[None]"
 
-    from jinja2 import Environment, StrictUndefined
+    from jinja2 import Environment
+    from jinja2 import StrictUndefined
 
     strict = Environment(undefined=StrictUndefined)
     tmpl = strict.from_string("{{ [{}]|map(attribute='foo', default=none)|list }}")
