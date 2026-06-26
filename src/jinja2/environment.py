@@ -1507,6 +1507,14 @@ class Template:
             name = repr(self.name)
         return f"<{type(self).__name__} {name}>"
 
+    def __copy__(self) -> "Template":
+        # Templates are treated as immutable; copies share the same instance.
+        return self
+
+    def __deepcopy__(self, memo: dict[int, t.Any]) -> "Template":
+        memo[id(self)] = self
+        return self
+
 
 class TemplateModule:
     """Represents an imported template.  All the exported names of the
