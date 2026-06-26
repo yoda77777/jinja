@@ -238,5 +238,7 @@ def test_contains_test(env):
 
     Regression for https://github.com/pallets/jinja/issues/1766
     """
-    tmpl = env.from_string("{{ ['Mike', 'Joe', 'Michael']|select('contains', 'Mi')|list }}")
+    tmpl = env.from_string(
+        "{{ ['Mike', 'Joe', 'Michael']|select('contains', 'Mi')|list }}"
+    )
     assert tmpl.render() == "['Mike', 'Michael']"

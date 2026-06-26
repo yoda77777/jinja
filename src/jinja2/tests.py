@@ -213,7 +213,6 @@ def test_in(value: t.Any, seq: t.Container[t.Any]) -> bool:
     return value in seq
 
 
-
 def test_contains(value: t.Container[t.Any], other: t.Any) -> bool:
     """Check if ``other`` is contained in ``value`` (flipped ``in`` test)."""
     return other in value
