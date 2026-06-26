@@ -881,3 +881,18 @@ class TestFilter:
 
         with pytest.raises(TemplateRuntimeError, match="No filter named 'f'"):
             t2.render(x=42)
+
+
+def test_map_attribute_default_none(env):
+    """map(attribute=..., default=None) must use None, not Undefined.
+
+    Regression for https://github.com/pallets/jinja/issues/2165
+    """
+    tmpl = env.from_string("{{ [{}]|map(attribute='foo', default=none)|list }}")
+    assert tmpl.render() == "[None]"
+
+    from jinja2 import Environment, StrictUndefined
+
+    strict = Environment(undefined=StrictUndefined)
+    tmpl = strict.from_string("{{ [{}]|map(attribute='foo', default=none)|list }}")
+    assert tmpl.render() == "[None]"
