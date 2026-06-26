@@ -881,3 +881,20 @@ class TestFilter:
 
         with pytest.raises(TemplateRuntimeError, match="No filter named 'f'"):
             t2.render(x=42)
+
+
+def test_indent_first_respects_blank(env):
+    """first=True must not indent an empty first line when blank is False.
+
+    Regression for https://github.com/pallets/jinja/issues/2176
+    """
+    tmpl = env.from_string("{% filter indent(4, first=True) %}{% endfilter %}")
+    assert tmpl.render() == ""
+
+    tmpl = env.from_string(
+        "{% filter indent(4, first=True, blank=True) %}{% endfilter %}"
+    )
+    assert tmpl.render() == "    "
+
+    # Non-empty first line is still indented when first=True.
+    assert env.from_string("{{ 'a\nb'|indent(2, first=True) }}").render() == "  a\n  b"

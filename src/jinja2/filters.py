@@ -861,7 +861,10 @@ def do_indent(
             )
 
     if first:
-        rv = indention + rv
+        # Respect blank=False for an empty first line (and fully empty input).
+        first_line = rv.partition(str(newline))[0]
+        if blank or first_line:
+            rv = indention + rv
 
     return rv
 
