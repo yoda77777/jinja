@@ -231,3 +231,14 @@ def test_is_filter(env):
 def test_is_test(env):
     assert env.call_test("test", "number")
     assert not env.call_test("test", "bad-name")
+
+
+def test_contains_test(env):
+    """contains is the flipped form of the in test.
+
+    Regression for https://github.com/pallets/jinja/issues/1766
+    """
+    tmpl = env.from_string(
+        "{{ ['Mike', 'Joe', 'Michael']|select('contains', 'Mi')|list }}"
+    )
+    assert tmpl.render() == "['Mike', 'Michael']"
