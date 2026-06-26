@@ -883,18 +883,26 @@ class TestFilter:
             t2.render(x=42)
 
 
+
 def test_indent_first_respects_blank(env):
-    """first=True must not indent an empty first line when blank is False.
+    """Empty input must not become spaces when first=True and blank=False.
 
     Regression for https://github.com/pallets/jinja/issues/2176
     """
     tmpl = env.from_string("{% filter indent(4, first=True) %}{% endfilter %}")
     assert tmpl.render() == ""
 
+    # Explicit blank=True still indents an empty result.
     tmpl = env.from_string(
         "{% filter indent(4, first=True, blank=True) %}{% endfilter %}"
     )
     assert tmpl.render() == "    "
 
-    # Non-empty first line is still indented when first=True.
-    assert env.from_string("{{ 'a\nb'|indent(2, first=True) }}").render() == "  a\n  b"
+    # Leading empty line with following content still gets first-line indent.
+    text = "
+".join(["", "foo bar", '"baz"', ""])
+    tmpl = env.from_string("{{ foo|indent(2, true, false) }}")
+    assert tmpl.render(foo=text) == '  
+  foo bar
+  "baz"
+'

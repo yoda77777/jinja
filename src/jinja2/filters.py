@@ -860,11 +860,12 @@ def do_indent(
                 indention + line if line else line for line in lines
             )
 
-    if first:
-        # Respect blank=False for an empty first line (and fully empty input).
-        first_line = rv.partition(str(newline))[0]
-        if blank or first_line:
-            rv = indention + rv
+    if first and (blank or rv):
+        # Fully empty input yields an empty string; do not invent indentation
+        # for a blank first line when blank=False. Non-empty results (including
+        # a leading empty line followed by content) still get the first-line
+        # prefix when first=True.
+        rv = indention + rv
 
     return rv
 
