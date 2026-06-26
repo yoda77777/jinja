@@ -818,8 +818,13 @@ def do_urlize(
     return rv
 
 
+@pass_environment
 def do_indent(
-    s: str, width: int | str = 4, first: bool = False, blank: bool = False
+    environment: "Environment",
+    s: str,
+    width: int | str = 4,
+    first: bool = False,
+    blank: bool = False,
 ) -> str:
     """Return a copy of the string with each line indented by 4 spaces. The
     first line and blank lines are not indented by default.
@@ -827,6 +832,9 @@ def do_indent(
     :param width: Number of spaces, or a string, to indent by.
     :param first: Don't skip indenting the first line.
     :param blank: Don't skip indenting empty lines.
+
+    .. versionchanged:: 3.2
+        Uses the environment ``newline_sequence`` instead of always ``\\n``.
 
     .. versionchanged:: 3.0
         ``width`` can be a string.
@@ -837,11 +845,11 @@ def do_indent(
         Rename the ``indentfirst`` argument to ``first``.
     """
     if isinstance(width, str):
-        indention = width
+        indention: str | Markup = width
     else:
         indention = " " * width
 
-    newline = "\n"
+    newline: str | Markup = environment.newline_sequence
 
     if isinstance(s, Markup):
         indention = Markup(indention)
