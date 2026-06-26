@@ -881,3 +881,16 @@ class TestFilter:
 
         with pytest.raises(TemplateRuntimeError, match="No filter named 'f'"):
             t2.render(x=42)
+
+
+def test_slice_fill_with_even_division(env):
+    """fill_with must not pad when items divide evenly across slices.
+
+    Regression for https://github.com/pallets/jinja/issues/2118
+    """
+    tmpl = env.from_string("{{ [1, 2, 3, 4]|slice(4, 'foo')|list }}")
+    assert tmpl.render() == "[[1], [2], [3], [4]]"
+
+    # Uneven division still pads the shorter columns.
+    tmpl = env.from_string("{{ [1, 2, 3, 4, 5]|slice(3, 'x')|list }}")
+    assert tmpl.render() == "[[1, 2], [3, 4], [5, 'x']]"
